@@ -26,10 +26,14 @@ exp ios
 ### TODO
 
 - [x] Start with simple ball animation to get started with **Animated** library
-- [ ] Animate the ball
+  - [x] Animate the ball
+- [x] Add **Cards** and animate one of them
 - [ ] Attach screenshots/gif of screens to `README.MD`
 
 ### Wireframes
 <div style={{display: flex; flex-direction: row}}>
-  <img  alt="wireframe" src="screenshots/wireframe1.png" width="800" />
+  <b>Step 1</b>
+  <img  alt="wireframe1" src="screenshots/wireframe1.png" width="500" />
+  <b>Step 2</b>
+  <img  alt="wireframe2" src="screenshots/wireframe2.png" width="500" />
 </div>
