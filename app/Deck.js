@@ -4,6 +4,9 @@ import {
   Animated,
   PanResponder,
   Dimensions,
+  StyleSheet,
+  LayoutAnimation,
+  UIManager,
 } from 'react-native';
 
 
@@ -38,6 +41,18 @@ export default class Deck extends React.Component {
     });
     this._panResponder = { panResponder, position }
     this.state = { index: 0 }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.data !== this.props.data) {
+      this.setState({ index: 0 });
+    }
+
+  }
+
+  componentDidUpdate() {
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    LayoutAnimation.spring();
   }
 
 
@@ -81,6 +96,11 @@ export default class Deck extends React.Component {
   }
 
   renderCards() {
+
+    if (this.state.index >= this.props.data.length) {
+      return this.props.renderNoMoreCards();
+    }
+    
     return this.props.data.map((item, i) => {
       if (i < this.state.index) { return null; }
 
@@ -88,15 +108,23 @@ export default class Deck extends React.Component {
         return (
           <Animated.View
             key={item.id}
-            style={this.getCardStyle()}
+            style={[this.getCardStyle(), styles.cardStyle]}
             {...this._panResponder.panResponder.panHandlers}
           >
             {this.props.renderCard(item)}
           </Animated.View>
         );
       }
-      return this.props.renderCard(item);
-    });
+      return (
+        <Animated.View 
+          key={item.id} 
+          style={[styles.cardStyle, { top: 10 * (i - this.state.index) }]}
+        >
+          {this.props.renderCard(item)}
+        </Animated.View>
+      )
+
+    }).reverse();
   }
   render() {
     return (
@@ -107,3 +135,10 @@ export default class Deck extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  cardStyle: {
+    position: 'absolute',
+    width: SCREEN_WIDTH
+  }
+});
